@@ -30,8 +30,8 @@ class SignIn extends Component {
                 <h1>I already have an account</h1>
                 <span>Sign in with your email and password</span>
                 <form onSubmit={this.handleSubmit}>
-                    <FormInput label="email" name= 'email' type ='email' handleChange={this.handleChange} value={this.state.email} required />
-                    <FormInput label="password" name="password" type ="password" value={this.state.password} handleChange={this.handleChange} required />
+                    <FormInput label="Email" name= 'email' type ='email' handleChange={this.handleChange} value={this.state.email} required />
+                    <FormInput label="Password" name="password" type ="password" value={this.state.password} handleChange={this.handleChange} required />
                 
                     <CustomButton type="submit">
                         SIGN IN
