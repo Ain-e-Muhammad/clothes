@@ -10,7 +10,6 @@ import {connect} from 'react-redux'
 import {setCurrentUser} from './redux/user/user.actions'
 import {selectCurrentUser} from './redux/user/user.selectors'
 import CheckoutPage from './pages/checkout/checkout.component'
-
 class  App extends Component{
 
 
@@ -31,9 +30,7 @@ class  App extends Component{
         )
       })
     }
-      else{
-        setCurrentUser(user)
-      }
+    setCurrentUser(user)
     })
   }
 

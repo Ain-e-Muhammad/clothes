@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
-import SHOP_DATA from "./shop.data"
 import CollectionPreview from '../../components/preview-collection/preview-collection.component'
+import {firestore, convertCollectionsSnapshotToMap} from '../../firebase/firebase.utils'
+import {connect} from 'react-redux'
+import { updateCollections } from '../../redux/shop/shop.actions';
+import {createStructuredSelector} from 'reselect'
+import {selectCollectionsForPreview} from '../../redux/shop/shop.selectors'
 
 class shopPage extends Component {
-    constructor(props){
-        super(props)
-        this.state={
-            collection: SHOP_DATA
-        }
+    unsubscribeFromSnapshot = null
+
+    componentDidMount(){
+        const{updateCollections} = this.props
+        const collectionRef = firestore.collection('collections')
+        collectionRef.onSnapshot(async (snapshot) => {
+            const collectionsMap = convertCollectionsSnapshotToMap(snapshot)
+            updateCollections(collectionsMap)
+        })
     }
+
     render() { 
-        const {collection}= this.state
+        const {collections}= this.props
         return ( 
             <div className="shop-page">
                 {
-                    collection.map( ({id, ...otherCollectionProps}) => {
+                    // console.log(collections)
+                    collections.map( ({id, ...otherCollectionProps}) => {
                         return <CollectionPreview key = {id} {...otherCollectionProps}/>
                     })
                 }
@@ -22,5 +32,15 @@ class shopPage extends Component {
          );
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    updateCollections: (collectionsMap) => {
+        dispatch(updateCollections(collectionsMap))
+    }      
+})
+
+const mapStateToProps = createStructuredSelector({
+    collections: selectCollectionsForPreview
+})
  
-export default shopPage;
+export default connect(mapStateToProps, mapDispatchToProps)(shopPage);
