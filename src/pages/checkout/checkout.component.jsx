@@ -4,10 +4,12 @@ import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import CheckoutItem from '../../components/checkout-item/checkout-item.component'
 import{selectCartItems, selectCartTotal} from '../../redux/cart/cart.selectors'
+import {selectLoginState} from '../../redux/login/login.selectors'
+import { Redirect } from 'react-router'
 
-
-const CheckoutPage = ({cartItems, total}) => {
+const CheckoutPage = ({cartItems, total, login}) => {
     return(
+        login === true ?
         <div className='checkout-page'>
             <div className='checkout-header'>
                 <div className='header-block'>
@@ -38,12 +40,15 @@ const CheckoutPage = ({cartItems, total}) => {
                 <span>Total : $ {total}</span>
             </div>
         </div>
+        :
+        <Redirect to='/signin'/>
     )
 }
 
 const mapStateToProps = createStructuredSelector({
     cartItems: selectCartItems,
-    total : selectCartTotal
+    total : selectCartTotal,
+    login : selectLoginState
 })
 
 export default connect(mapStateToProps)(CheckoutPage)

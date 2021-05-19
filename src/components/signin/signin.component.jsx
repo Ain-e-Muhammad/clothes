@@ -4,6 +4,8 @@ import FormInput from '../form-input/forminput.component'
 import CustomButton from '../custom-button/custom-button.component'
 import {signInWithGoogle} from '../../firebase/firebase.utils'
 import {auth} from '../../firebase/firebase.utils'
+import {connect} from 'react-redux'
+import {toggleLogin} from '../../redux/login/login.actions'
 
 class SignIn extends Component {
     constructor(props) {
@@ -21,6 +23,8 @@ class SignIn extends Component {
         try{
             await auth.signInWithEmailAndPassword(email,password)
             this.setState({email:'', password:''})
+            this.props.toggleLogin()
+            this.props.history.push('/shop')
         }catch(err){
             console.log(err)
         }
@@ -54,5 +58,9 @@ class SignIn extends Component {
          );
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    toggleLogin: () => dispatch(toggleLogin())
+})
  
-export default SignIn;
+export default connect(null, mapDispatchToProps)(SignIn);
