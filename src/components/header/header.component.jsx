@@ -1,18 +1,25 @@
 import React from 'react'
-import './header.styles.scss'
 import {Link} from 'react-router-dom'
-import {ReactComponent as Logo} from '../../assets/crown.svg'
 import {auth} from '../../firebase/firebase.utils'
 import {connect} from 'react-redux'
 import CartIcon from '../cart-icon/cart-icon.component'
 import CartDropDown from '../cart-dropdown/cart-dropdown.component'
-import{createStructuredSelector} from 'reselect'
+import {toggleLogin} from '../../redux/login/login.actions'
 import {selectCartHidden} from '../../redux/cart/cart.selectors'
 import {selectCurrentUser} from '../../redux/user/user.selectors'
-import {toggleLogin} from '../../redux/login/login.actions'
+import {ReactComponent as Logo} from '../../assets/crown.svg'
+import {createStructuredSelector} from 'reselect'
+
+import './header.styles.scss'
 
 
 const Header = ({toggleLogin, currentUser, hidden}) => {
+
+    const handleClick = () => {
+        toggleLogin()
+        auth.signOut()
+    }
+
     return(
         <div className='header'>
             <Link to="/">
@@ -27,10 +34,7 @@ const Header = ({toggleLogin, currentUser, hidden}) => {
                 </Link>
                 {
                     currentUser ?
-                    (<div className='option' onClick = {() => {
-                        toggleLogin()
-                        auth.signOut()
-                    }}> 
+                    (<div className='option' onClick = {handleClick}> 
                         SIGN OUT
                     </div>)
                     :
@@ -38,11 +42,11 @@ const Header = ({toggleLogin, currentUser, hidden}) => {
                     SIGN IN
                     </Link>)
                 }
-                 <CartIcon/>
+                    <CartIcon/>
             </div>
             {hidden ? null :
             <CartDropDown />
-}
+    }
         </div>
     )
 }
